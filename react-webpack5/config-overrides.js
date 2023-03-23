@@ -6,7 +6,6 @@ module.exports = {
     config.entry = config.entry.filter(
       (e) => !e.includes('webpackHotDevClient')
     );
-
     config.output.library = `${name}-[name]`;
     config.output.libraryTarget = 'umd';
     config.output.jsonpFunction = `webpackJsonp_${name}`;

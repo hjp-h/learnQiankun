@@ -3,6 +3,7 @@ import App from "./App.vue";
 import { createRouter, createWebHistory } from "vue-router";
 import { routes } from "./router";
 import store from "./store";
+import registerGlobalModule from "./store/global-register";
 // public-path
 import "../src/config/public-path";
 type CommonObject = {
@@ -26,6 +27,7 @@ function render(props: CommonObject = {}) {
 }
 
 if (!(window as any).__POWERED_BY_QIANKUN__) {
+  registerGlobalModule(store, { user: { name: "hjp" } });
   render();
 }
 export async function bootstrap() {
@@ -34,12 +36,22 @@ export async function bootstrap() {
 
 export async function mount(props: CommonObject) {
   console.log("[vue] props from main framework", props);
-
+  registerGlobalModule(store, props ?? { user: { name: "hjp" } });
   render(props);
+  props.onGlobalStateChange(
+    (newState: CommonObject, oldState: CommonObject) => {
+      console.log(
+        `${props.name} 监听到状态改变`,
+        newState,
+        "oldState",
+        oldState
+      );
+    }
+  );
 }
 
 export async function unmount() {
-  instance?.$destroy();
+  instance?.$destroy?.();
   instance.$el.innerHTML = "";
   instance = null;
 }

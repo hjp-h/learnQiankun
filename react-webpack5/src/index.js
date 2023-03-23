@@ -1,17 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
+import "./public-path"
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import "./public-path"
 
 let root
 function render(){
   root = ReactDOM.createRoot(document.getElementById('root'));
   root.render(
-    <React.StrictMode>
       <App />
-    </React.StrictMode>
   );
 }
 if(!window.__POWERED_BY_QIANKUN__){
@@ -29,7 +27,11 @@ export async function bootstrap() {
  * 应用每次进入都会调用 mount 方法，通常我们在这里触发应用的渲染方法
  */
 export async function mount(props) {
-  console.log('基座下发的能力：', props);
+  console.log('mount',props.name, props);
+  props.onGlobalStateChange((state, prev) => {
+    // state: 变更后的状态; prev 变更前的状态
+    console.log("onGlobalStateChange",state, prev);
+  });
   render();
 }
 /**
